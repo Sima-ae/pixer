@@ -25,11 +25,10 @@ const EuroIcon = ({ className }: { className?: string }) => (
 const navigation = [
   { name: 'Home', href: '/', icon: HomeIcon },
   { name: 'Explore', href: '/explore', icon: MapIcon },
-  { name: 'Popular Products', href: '/popular', icon: CubeIcon },
-  { name: 'Top Authors', href: '/authors', icon: UserGroupIcon },
-  { name: 'Feed', href: '/feed', icon: RssIcon },
+  { name: 'Most Popular', href: '/popular', icon: CubeIcon },
+  { name: 'Become a Seller', href: '/seller', icon: UserGroupIcon },
   { name: 'Contact', href: '/contact', icon: PhoneIcon },
-  { name: 'Become a Seller', href: '/seller', icon: EuroIcon },
+  
 ]
 
 const bottomNavigation = [
