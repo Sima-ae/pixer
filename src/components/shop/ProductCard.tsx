@@ -10,8 +10,8 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   return (
-    <div className="card group cursor-pointer">
-      <div className="relative aspect-video mb-4 overflow-hidden rounded-lg">
+    <div className="card group cursor-pointer hover:shadow-xl transition-all duration-300 w-full">
+      <div className="relative aspect-video mb-3 overflow-hidden rounded-lg">
         <Image
           src={product.image_url}
           alt={product.name}
@@ -21,17 +21,17 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300" />
       </div>
       
-      <div className="space-y-3">
-        <h3 className="font-semibold text-lg line-clamp-2 group-hover:text-primary-500 transition-colors">
+      <div className="space-y-2">
+        <h3 className="font-semibold text-xs sm:text-sm line-clamp-2 group-hover:text-primary-500 transition-colors leading-tight">
           {product.name}
         </h3>
         
-        <p className="text-gray-400 text-sm line-clamp-2">
+        <p className="text-gray-400 text-xs line-clamp-2 leading-tight">
           {product.description}
         </p>
         
         <div className="flex items-center space-x-2">
-          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
+          <div className={`w-4 h-4 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0 ${
             product.author_icon === 'i' ? 'bg-green-500' :
             product.author_icon === 'Q' ? 'bg-green-500' :
             product.author_icon === 'M' ? 'bg-purple-500' :
@@ -39,22 +39,22 @@ export default function ProductCard({ product }: ProductCardProps) {
           }`}>
             {product.author_icon}
           </div>
-          <span className="text-gray-300 text-sm">{product.author}</span>
+          <span className="text-gray-300 text-xs truncate">{product.author}</span>
         </div>
         
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
+        <div className="flex items-center justify-between pt-1">
+          <div className="flex items-center space-x-2 min-w-0">
             {product.original_price && product.original_price > product.price ? (
               <>
-                <span className="text-lg font-bold text-primary-500">
+                <span className="text-sm sm:text-base font-bold text-primary-500 truncate">
                   ${product.price.toFixed(2)}
                 </span>
-                <span className="text-gray-400 line-through">
+                <span className="text-gray-400 line-through text-xs truncate">
                   ${product.original_price.toFixed(2)}
                 </span>
               </>
             ) : (
-              <span className="text-lg font-bold text-primary-500">
+              <span className="text-sm sm:text-base font-bold text-primary-500 truncate">
                 {product.price === 0 ? 'FREE' : `$${product.price.toFixed(2)}`}
               </span>
             )}
@@ -62,7 +62,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           
           <Link 
             href={`/product/${product.id}`}
-            className="btn-primary text-sm py-1 px-3"
+            className="btn-primary text-xs py-1 px-2 flex-shrink-0"
           >
             View Details
           </Link>

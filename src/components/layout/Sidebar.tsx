@@ -38,7 +38,7 @@ export default function Sidebar() {
       <div className="p-4">
         <div className="flex items-center justify-between mb-8">
           <h1 className={`font-bold text-xl text-gradient ${isCollapsed ? 'hidden' : 'block'}`}>
-            Pixer
+            StuntXL
           </h1>
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
@@ -100,8 +100,8 @@ export default function Sidebar() {
               <Link href="/help" className="block hover:text-white transition-colors">Help</Link>
             </div>
             <div className="mt-4 text-center">
-              <p>©2025 Pixer. Copyright © REDQ.</p>
-              <p>All rights reserved worldwide. REDQ.</p>
+              <p>©2025 StuntXL. Copyright © TripleZero iT.</p>
+              <p>All rights reserved worldwide. TripleZero iT.</p>
             </div>
           </div>
         )}

@@ -1,127 +1,131 @@
-# Pixer - Digital Marketplace
+# StuntXL - Digital Marketplace
 
-A unified Next.js application combining the shop frontend and admin dashboard with Supabase backend.
+A modern digital marketplace built with Next.js 14, featuring a shop frontend and admin dashboard, integrated with Supabase for database management.
 
-## Features
+## 🚀 Features
 
-- **Shop Frontend**: Digital marketplace with product grid, categories, and search
-- **Admin Dashboard**: Complete admin panel with analytics, orders, and product management
+- **Shop Frontend**: Beautiful product showcase with category filtering
+- **Admin Dashboard**: Comprehensive management interface
+- **Modern UI**: Dark theme with custom color palette
+- **Responsive Design**: Mobile-first approach
+- **TypeScript**: Full type safety
 - **Supabase Integration**: PostgreSQL database with real-time capabilities
-- **Modern UI**: Dark theme with Tailwind CSS and responsive design
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-- **Frontend**: Next.js 14, React 18, TypeScript
+- **Frontend**: Next.js 14 (App Router)
 - **Styling**: Tailwind CSS
 - **Database**: Supabase (PostgreSQL)
 - **Icons**: Heroicons
 - **Animations**: Framer Motion
+- **Language**: TypeScript
 
-## Setup
+## 📁 Project Structure
 
-1. **Install dependencies**:
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── layout.tsx         # Root layout
+│   ├── page.tsx           # Shop homepage
+│   └── admin/
+│       └── page.tsx       # Admin dashboard
+├── components/             # Reusable components
+│   ├── layout/            # Layout components
+│   ├── shop/              # Shop-specific components
+│   └── admin/             # Admin-specific components
+└── lib/                   # Utilities and configurations
+    └── supabase.ts        # Supabase client setup
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ 
+- npm or yarn
+- Supabase account
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd triplezero-it
+   ```
+
+2. **Install dependencies**
    ```bash
    npm install
    ```
 
-2. **Environment variables**:
-   Copy `env.template` to `.env.local` and fill in your Supabase credentials:
+3. **Set up environment variables**
    ```bash
    cp env.template .env.local
    ```
-
-3. **Supabase Setup**:
-   - Create a new Supabase project
-   - Get your project URL and anon key
-   - Update `.env.local` with your credentials
-
-4. **Database Schema**:
-   Run the SQL script in Supabase SQL Editor to create tables:
-   ```sql
-   -- Create products table
-   CREATE TABLE products (
-     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-     name VARCHAR(255) NOT NULL,
-     description TEXT,
-     price DECIMAL(10,2) NOT NULL DEFAULT 0,
-     original_price DECIMAL(10,2),
-     image_url TEXT,
-     category VARCHAR(100),
-     author VARCHAR(100),
-     author_icon VARCHAR(10),
-     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-   );
-
-   -- Create categories table
-   CREATE TABLE categories (
-     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-     name VARCHAR(100) NOT NULL,
-     slug VARCHAR(100) UNIQUE NOT NULL,
-     description TEXT,
-     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-   );
-
-   -- Create users table
-   CREATE TABLE users (
-     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-     email VARCHAR(255) UNIQUE NOT NULL,
-     name VARCHAR(255) NOT NULL,
-     role VARCHAR(20) DEFAULT 'customer',
-     avatar_url TEXT,
-     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-   );
-
-   -- Create orders table
-   CREATE TABLE orders (
-     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-     tracking_number VARCHAR(50) UNIQUE NOT NULL,
-     customer_email VARCHAR(255) NOT NULL,
-     customer_name VARCHAR(255) NOT NULL,
-     total DECIMAL(10,2) NOT NULL,
-     status VARCHAR(20) DEFAULT 'pending',
-     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-   );
+   
+   Update `.env.local` with your Supabase credentials:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
    ```
 
-5. **Run development server**:
+4. **Run the development server**
    ```bash
    npm run dev
    ```
 
-6. **Build for production**:
-   ```bash
-   npm run build
-   npm start
-   ```
+5. **Open your browser**
+   - Shop: http://localhost:3000
+   - Admin: http://localhost:3000/admin
 
-## Project Structure
+## 🗄️ Database Setup
 
+Run this SQL in your Supabase SQL Editor:
+
+```sql
+-- Create categories table
+CREATE TABLE categories (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  slug VARCHAR(255) UNIQUE NOT NULL,
+  description TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Create products table
+CREATE TABLE products (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  price DECIMAL(10,2) NOT NULL,
+  category_id INTEGER REFERENCES categories(id),
+  image_url VARCHAR(500),
+  author_id INTEGER,
+  status VARCHAR(50) DEFAULT 'active',
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Create users table
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  name VARCHAR(255),
+  role VARCHAR(50) DEFAULT 'user',
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Create orders table
+CREATE TABLE orders (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  product_id INTEGER REFERENCES products(id),
+  status VARCHAR(50) DEFAULT 'pending',
+  amount DECIMAL(10,2) NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
 ```
-src/
-├── app/                 # Next.js app router
-│   ├── admin/          # Admin dashboard pages
-│   ├── globals.css     # Global styles
-│   ├── layout.tsx      # Root layout
-│   └── page.tsx        # Shop homepage
-├── components/          # Reusable components
-│   ├── admin/          # Admin-specific components
-│   ├── layout/         # Layout components
-│   └── shop/           # Shop-specific components
-├── lib/                 # Utilities and configurations
-│   └── supabase.ts     # Supabase client and types
-└── types/               # TypeScript type definitions
-```
 
-## Routes
-
-- `/` - Shop homepage with product grid
-- `/admin` - Admin dashboard
-- `/admin/products` - Product management
-- `/admin/orders` - Order management
-- `/admin/shops` - Shop management
-
-## Deployment
+## 🚀 Deployment
 
 ### Vercel (Recommended)
 
@@ -129,18 +133,52 @@ src/
 2. Set environment variables in Vercel dashboard
 3. Deploy automatically on push to main branch
 
-### Environment Variables for Vercel
+### Other Platforms
 
-- `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase project URL
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anon key
+- **Netlify**: Use `npm run build` and deploy the `.next` folder
+- **Railway**: Deploy with Node.js environment
+- **Docker**: Use the provided Dockerfile
 
-## Contributing
+## 📱 Available Routes
+
+- `/` - Shop homepage
+- `/admin` - Admin dashboard
+- `/explore` - Product exploration
+- `/popular` - Popular products
+- `/authors` - Top authors
+- `/feed` - Activity feed
+- `/contact` - Contact page
+- `/seller` - Become a seller
+
+## 🎨 Customization
+
+### Colors
+
+The app uses a custom color palette defined in `tailwind.config.js`:
+
+- **Primary**: Green accent colors
+- **Dark**: Dark theme with multiple shades
+- **Gray**: Neutral grays for text and borders
+
+### Components
+
+All components are built with Tailwind CSS and can be easily customized by modifying the classes in each component file.
+
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
 4. Submit a pull request
 
-## License
+## 📄 License
 
-©2025 Pixer. Copyright © REDQ. All rights reserved worldwide.
+This project is licensed under the MIT License.
+
+## 🆘 Support
+
+For support, please open an issue in the GitHub repository or contact the development team.
+
+---
+
+©2025 StuntXL. Copyright © TripleZero iT. All rights reserved worldwide.

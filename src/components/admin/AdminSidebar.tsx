@@ -62,9 +62,9 @@ export default function AdminSidebar() {
       <div className="p-6">
         <div className="flex items-center mb-8">
           <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center mr-3">
-            <span className="text-white font-bold text-lg">P</span>
+            <span className="text-white font-bold text-lg">S</span>
           </div>
-          <h1 className="text-xl font-bold text-gradient">Pixer</h1>
+          <h1 className="text-xl font-bold text-gradient">StuntXL</h1>
         </div>
 
         <nav className="space-y-6">
