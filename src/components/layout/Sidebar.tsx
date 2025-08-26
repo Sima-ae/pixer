@@ -99,9 +99,9 @@ export default function Sidebar() {
               <Link href="/privacy" className="block hover:text-white transition-colors">Privacy</Link>
               <Link href="/help" className="block hover:text-white transition-colors">Help</Link>
             </div>
-            <div className="mt-4 text-center">
-              <p>©2025 StuntXL. Copyright © TripleZero iT.</p>
-              <p>All rights reserved worldwide. TripleZero iT.</p>
+            <div className="mt-4 text-left">
+            <p></p>
+            <p>TripleZero iT © 2025</p>
             </div>
           </div>
         )}
