@@ -3,12 +3,35 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Product } from '@/lib/supabase'
+import { useCart } from '@/lib/cart'
+import { useState } from 'react'
 
 interface ProductCardProps {
   product: Product
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const { addItem, isInCart, getItemQuantity } = useCart()
+  const [isAdding, setIsAdding] = useState(false)
+  
+  const handleAddToCart = async () => {
+    setIsAdding(true)
+    try {
+      addItem({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        original_price: product.original_price,
+        image_url: product.image_url,
+      })
+    } finally {
+      setIsAdding(false)
+    }
+  }
+
+  const quantity = getItemQuantity(product.id)
+  const inCart = isInCart(product.id)
+
   return (
     <div className="card group cursor-pointer hover:shadow-xl transition-all duration-300 w-full">
       <div className="relative aspect-video mb-3 overflow-hidden rounded-lg">
@@ -60,12 +83,34 @@ export default function ProductCard({ product }: ProductCardProps) {
             )}
           </div>
           
-          <Link 
-            href={`/product/${product.id}`}
-            className="btn-primary text-xs py-1 px-2 flex-shrink-0"
-          >
-            View Details
-          </Link>
+          <div className="flex items-center space-x-2">
+            {inCart ? (
+              <div className="flex items-center space-x-1">
+                <button
+                  onClick={handleAddToCart}
+                  disabled={isAdding}
+                  className="btn-primary text-xs py-1 px-2 flex-shrink-0 bg-green-600 hover:bg-green-700"
+                >
+                  {isAdding ? 'Adding...' : `In Cart (${quantity})`}
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={handleAddToCart}
+                disabled={isAdding}
+                className="btn-primary text-xs py-1 px-2 flex-shrink-0"
+              >
+                {isAdding ? 'Adding...' : 'Add to Cart'}
+              </button>
+            )}
+            
+            <Link 
+              href={`/product/${product.id}`}
+              className="btn-secondary text-xs py-1 px-2 flex-shrink-0"
+            >
+              View
+            </Link>
+          </div>
         </div>
       </div>
     </div>

@@ -10,9 +10,17 @@ import {
   UserGroupIcon, 
   RssIcon, 
   PaperAirplaneIcon,
+  PhoneIcon,
   Cog6ToothIcon,
   QuestionMarkCircleIcon
 } from '@heroicons/react/24/outline'
+
+// Custom Euro Icon component
+const EuroIcon = ({ className }: { className?: string }) => (
+  <div className={`${className} flex items-center justify-center font-bold text-2xl`}>
+    €
+  </div>
+)
 
 const navigation = [
   { name: 'Home', href: '/', icon: HomeIcon },
@@ -20,8 +28,8 @@ const navigation = [
   { name: 'Popular Products', href: '/popular', icon: CubeIcon },
   { name: 'Top Authors', href: '/authors', icon: UserGroupIcon },
   { name: 'Feed', href: '/feed', icon: RssIcon },
-  { name: 'Contact', href: '/contact', icon: PaperAirplaneIcon },
-  { name: 'Become Seller', href: '/seller', icon: PaperAirplaneIcon },
+  { name: 'Contact', href: '/contact', icon: PhoneIcon },
+  { name: 'Become a Seller', href: '/seller', icon: EuroIcon },
 ]
 
 const bottomNavigation = [
@@ -34,11 +42,11 @@ export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false)
 
   return (
-    <div className={`sidebar transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-64'}`}>
+    <div className={`sidebar transition-all duration-300 ${isCollapsed ? 'w-20' : 'w-64'}`}>
       <div className="p-4">
         <div className="flex items-center justify-between mb-8">
           <h1 className={`font-bold text-xl text-gradient ${isCollapsed ? 'hidden' : 'block'}`}>
-            StuntXL
+            TripleZero iT
           </h1>
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
@@ -61,9 +69,10 @@ export default function Sidebar() {
                   isActive
                     ? 'bg-primary-500 text-white'
                     : 'text-gray-300 hover:bg-dark-700 hover:text-white'
-                }`}
+                } ${isCollapsed ? 'justify-center' : ''}`}
+                title={isCollapsed ? item.name : undefined}
               >
-                <item.icon className="w-5 h-5 mr-3" />
+                <item.icon className={`w-[26px] h-[26px] flex-shrink-0 ${isCollapsed ? '' : 'mr-3'}`} />
                 {!isCollapsed && <span>{item.name}</span>}
               </Link>
             )
@@ -82,9 +91,10 @@ export default function Sidebar() {
                     isActive
                       ? 'bg-primary-500 text-white'
                       : 'text-gray-300 hover:bg-dark-700 hover:text-white'
-                  }`}
+                  } ${isCollapsed ? 'justify-center' : ''}`}
+                  title={isCollapsed ? item.name : undefined}
                 >
-                  <item.icon className="w-5 h-5 mr-3" />
+                  <item.icon className={`w-[26px] h-[26px] flex-shrink-0 ${isCollapsed ? '' : 'mr-3'}`} />
                   {!isCollapsed && <span>{item.name}</span>}
                 </Link>
               )
@@ -95,13 +105,15 @@ export default function Sidebar() {
         {!isCollapsed && (
           <div className="mt-8 pt-6 border-t border-dark-700 text-xs text-gray-400">
             <div className="space-y-2">
-              <Link href="/terms" className="block hover:text-white transition-colors">Terms</Link>
-              <Link href="/privacy" className="block hover:text-white transition-colors">Privacy</Link>
-              <Link href="/help" className="block hover:text-white transition-colors">Help</Link>
+            <Link href="/cookie-policy" className="block hover:text-white transition-colors">Cookie Policy</Link>
+            <Link href="/privacy-policy" className="block hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="/terms-conditions" className="block hover:text-white transition-colors">Terms & Conditions</Link>
+              
+              
             </div>
             <div className="mt-4 text-left">
-            <p></p>
-            <p>TripleZero iT © 2025</p>
+              <br /><br />
+              <p><b>TripleZero iT © 2025</b></p>
             </div>
           </div>
         )}

@@ -25,7 +25,7 @@ export default function Header() {
           <h1 className="text-xl font-bold text-gradient">Pixer</h1>
         </div>
 
-        <div className="flex-1 max-w-md mx-8">
+        <div className="flex-1 max-w-lg mx-8">
           <div className="relative">
             <input
               type="text"

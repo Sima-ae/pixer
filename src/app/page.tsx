@@ -5,6 +5,8 @@ import Sidebar from '@/components/layout/Sidebar'
 import ProductCard from '@/components/shop/ProductCard'
 import CategoryFilter from '@/components/shop/CategoryFilter'
 import { Product, supabase } from '@/lib/supabase'
+import { useCart } from '@/lib/cart'
+import Link from 'next/link'
 
 // Mock data for development - replace with Supabase data
 const mockProducts: Product[] = [
@@ -135,6 +137,7 @@ export default function HomePage() {
   const [products, setProducts] = useState<Product[]>(mockProducts)
   const [selectedCategory, setSelectedCategory] = useState('All')
   const [loading, setLoading] = useState(false)
+  const { state: cartState } = useCart()
 
   useEffect(() => {
     // TODO: Replace with actual Supabase query
@@ -154,7 +157,7 @@ export default function HomePage() {
         <div className="bg-dark-800 border-b border-dark-700 px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             {/* Search Bar - Left Side */}
-            <div className="max-w-md">
+            <div className="max-w-lg">
               <div className="relative">
                 <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -183,12 +186,17 @@ export default function HomePage() {
                 </svg>
               </button>
               
-              {/* Cart Icon */}
-              <button className="p-2 text-gray-400 hover:text-white transition-colors" title="Shopping Cart">
+              {/* Cart Icon with Notification Badge */}
+              <Link href="/cart" className="relative p-2 text-gray-400 hover:text-white transition-colors" title="Shopping Cart">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
-              </button>
+                {cartState.itemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-primary-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
+                    {cartState.itemCount > 99 ? '99+' : cartState.itemCount}
+                  </span>
+                )}
+              </Link>
               
               {/* Become a Seller Button */}
               <button className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 hover:shadow-lg" title="Become a Seller">
