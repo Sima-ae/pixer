@@ -9,146 +9,80 @@ import { useCart } from '@/lib/cart'
 import { useTheme } from '@/lib/theme'
 import Link from 'next/link'
 
-// Mock data for development - replace with Supabase data
-const mockProducts: Product[] = [
-  {
-    id: '1',
-    name: 'Temprador WooCommerce Template',
-    description: 'Great software is built with amazing developers',
-    price: 59.0,
-    original_price: 65.0,
-    image_url: 'https://picsum.photos/400/300?random=1',
-    category: 'WordPress Theme',
-    author: 'TripleZero iT',
-    author_icon: 'i',
-    created_at: '2024-01-01',
-    updated_at: '2024-01-01',
-  },
-  {
-    id: '2',
-    name: 'Shoppie UI Kit PSD Ecommerce',
-    description: 'Bring the smile to orphans face',
-    price: 7.99,
-    image_url: 'https://picsum.photos/400/300?random=2',
-    category: 'UI templates',
-    author: 'TripleZero iT',
-    author_icon: 'T',
-    created_at: '2024-01-01',
-    updated_at: '2024-01-01',
-  },
-  {
-    id: '3',
-    name: 'Shippipro Rental Laravel Script',
-    description: 'The leading Customer dashboard for your daily workspace',
-    price: 69.0,
-    image_url: 'https://picsum.photos/400/300?random=3',
-    category: 'PHP Script',
-    author: 'Marvel',
-    author_icon: 'M',
-    created_at: '2024-01-01',
-    updated_at: '2024-01-01',
-  },
-  {
-    id: '4',
-    name: 'Bookify Rental Laravel Rental Solution',
-    description: 'Bookify Rental Laravel Rental Solution',
-    price: 43.0,
-    image_url: 'https://picsum.photos/400/300?random=4',
-    category: 'PHP Script',
-    author: 'Marvel',
-    author_icon: 'M',
-    created_at: '2024-01-01',
-    updated_at: '2024-01-01',
-  },
-  {
-    id: '5',
-    name: 'Phonify Modern Phone Application',
-    description: 'Experience your ultimate mobile application',
-    price: 29.0,
-    image_url: 'https://picsum.photos/400/300?random=5',
-    category: 'Mobile App',
-    author: 'TripleZero iT',
-    author_icon: 'i',
-    created_at: '2024-01-01',
-    updated_at: '2024-01-01',
-  },
-  {
-    id: '6',
-    name: 'Landity Joomla Angular Landing Page',
-    description: 'Learn Design with Nia Matos',
-    price: 75.0,
-    image_url: 'https://picsum.photos/400/300?random=6',
-    category: 'Angular',
-    author: 'Marvel',
-    author_icon: 'M',
-    created_at: '2024-01-01',
-    updated_at: '2024-01-01',
-  },
-  {
-    id: '7',
-    name: 'Blogsy Agency Blog Theme',
-    description: 'The leading Customer dashboard for your daily workspace',
-    price: 79.0,
-    image_url: 'https://picsum.photos/400/300?random=7',
-    category: 'WordPress Theme',
-    author: 'Marvel',
-    author_icon: 'M',
-    created_at: '2024-01-01',
-    updated_at: '2024-01-01',
-  },
-  {
-    id: '8',
-    name: 'Dashify React Shopify Dashboard',
-    description: 'Most powerful Dashboard we made',
-    price: 69.0,
-    image_url: 'https://picsum.photos/400/300?random=8',
-    category: 'React',
-    author: 'Marvel',
-    author_icon: 'M',
-    created_at: '2024-01-01',
-    updated_at: '2024-01-01',
-  },
-  {
-    id: '9',
-    name: 'Isomorphic React Next Joomla Dashboard',
-    description: 'Most powerful Dashboard we made',
-    price: 0,
-    image_url: 'https://picsum.photos/400/300?random=9',
-    category: 'React',
-    author: 'Marvel',
-    author_icon: 'M',
-    created_at: '2024-01-01',
-    updated_at: '2024-01-01',
-  },
-  {
-    id: '10',
-    name: 'Phone Gapp All in One Phone CRM',
-    description: 'Cloud CRM Software for entry level business enterprise',
-    price: 25.0,
-    image_url: 'https://picsum.photos/400/300?random=10',
-    category: 'Mobile App',
-    author: 'Marvel',
-    author_icon: 'M',
-    created_at: '2024-01-01',
-    updated_at: '2024-01-01',
-  },
-]
-
 export default function HomePage() {
-  const [products, setProducts] = useState<Product[]>(mockProducts)
+  const [products, setProducts] = useState<Product[]>([])
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
   const [selectedCategory, setSelectedCategory] = useState('All')
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const { state: cartState } = useCart()
   const { theme, toggleTheme } = useTheme()
 
   useEffect(() => {
-    // TODO: Replace with actual Supabase query
-    // fetchProducts()
-  }, [selectedCategory])
+    fetchProducts()
+  }, [])
 
-  const filteredProducts = selectedCategory === 'All'
-    ? products
-    : products.filter((product) => product.category === selectedCategory)
+  useEffect(() => {
+    if (selectedCategory === 'All') {
+      setFilteredProducts(products)
+    } else {
+      setFilteredProducts(products.filter(product => product.category === selectedCategory))
+    }
+  }, [selectedCategory, products])
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      
+      // Simple direct approach - bypass potential Supabase client issues
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      
+      if (!supabaseUrl || !supabaseKey) {
+        throw new Error('Missing Supabase credentials')
+      }
+      
+      // Use direct REST API call instead of Supabase client
+      const response = await fetch(`${supabaseUrl}/rest/v1/products?select=*&order=created_at.desc`, {
+        headers: {
+          'apikey': supabaseKey,
+          'Authorization': `Bearer ${supabaseKey}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
+      const data = await response.json()
+      
+      if (!Array.isArray(data)) {
+        throw new Error('Invalid data format returned')
+      }
+      
+      setProducts(data)
+      setFilteredProducts(data)
+      setError(null)
+      
+    } catch (error) {
+      console.error('Error fetching products:', error)
+      setError(`Failed to fetch products: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      setProducts([])
+      setFilteredProducts([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category)
+  }
+
+  const retryFetch = () => {
+    fetchProducts()
+  }
 
   return (
     <div className={`flex min-h-screen transition-colors duration-200 ${
@@ -224,7 +158,7 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
                 {cartState.itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-primary-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
+                  <span className="absolute -top-1 -right-1 bg-primary-500 text-white text-xs rounded-full w-5 h-6 flex items-center justify-center font-medium">
                     {cartState.itemCount > 99 ? '99+' : cartState.itemCount}
                   </span>
                 )}
@@ -244,16 +178,43 @@ export default function HomePage() {
           <div className="max-w-full">
             <CategoryFilter
               selectedCategory={selectedCategory}
-              onCategoryChange={setSelectedCategory}
+              onCategoryChange={handleCategoryChange}
             />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-6 mt-6">
-              {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
+            {loading ? (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto mb-4"></div>
+                <p className={`text-lg transition-colors duration-200 ${
+                  theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                }`}>Loading products...</p>
+              </div>
+            ) : error ? (
+              <div className="text-center py-12">
+                <div className="text-red-500 mb-4">
+                  <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Failed to Load Products</h3>
+                <p className={`text-lg transition-colors duration-200 ${
+                  theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                } mb-4`}>{error}</p>
+                <button
+                  onClick={retryFetch}
+                  className="bg-primary-500 hover:bg-primary-600 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200"
+                >
+                  Try Again
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-6 mt-6">
+                {filteredProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            )}
 
-            {filteredProducts.length === 0 && (
+            {filteredProducts.length === 0 && !loading && !error && (
               <div className="text-center py-12">
                 <p className={`text-lg transition-colors duration-200 ${
                   theme === 'dark' ? 'text-gray-400' : 'text-gray-600'

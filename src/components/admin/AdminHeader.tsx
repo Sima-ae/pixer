@@ -1,10 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import { MagnifyingGlassIcon, BuildingOfficeIcon } from '@heroicons/react/24/outline'
+import { MagnifyingGlassIcon, BuildingOfficeIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline'
+import { useAuth } from '@/lib/auth'
+import Link from 'next/link'
 
 export default function AdminHeader() {
   const [searchQuery, setSearchQuery] = useState('')
+  const { user, signOut } = useAuth()
+
+  const handleLogout = async () => {
+    await signOut()
+  }
 
   return (
     <header className="header px-6 py-4">
@@ -33,19 +40,31 @@ export default function AdminHeader() {
             Create Shop
           </button>
           
-          <button className="btn-secondary flex items-center space-x-2">
+          <Link href="/" className="btn-secondary flex items-center space-x-2">
             <BuildingOfficeIcon className="w-5 h-5" />
             <span>Visit Site</span>
-          </button>
+          </Link>
           
-          <div className="flex items-center space-x-3 p-2 rounded-lg hover:bg-dark-700 transition-colors">
-            <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-medium">J</span>
+          <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-3 p-2 rounded-lg hover:bg-dark-700 transition-colors">
+              <div className="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center">
+                <span className="text-white font-medium">
+                  {user?.name?.charAt(0) || user?.email?.charAt(0) || 'A'}
+                </span>
+              </div>
+              <div className="text-left">
+                <p className="font-medium text-white">{user?.name || 'Admin User'}</p>
+                <p className="text-sm text-gray-400 capitalize">{user?.role || 'admin'}</p>
+              </div>
             </div>
-            <div className="text-left">
-              <p className="font-medium">Jhon Doe</p>
-              <p className="text-sm text-gray-400">Super Admin</p>
-            </div>
+            
+            <button
+              onClick={handleLogout}
+              className="p-2 rounded-lg hover:bg-dark-700 transition-colors text-gray-400 hover:text-white"
+              title="Logout"
+            >
+              <ArrowRightOnRectangleIcon className="w-5 h-5" />
+            </button>
           </div>
         </div>
       </div>
