@@ -73,6 +73,36 @@ html, body {
   .cart-badge {
     @apply absolute -top-1 -right-1 bg-primary-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium;
   }
+
+  /* Product page tabs */
+  .product-tabs {
+    @apply border-b border-dark-700;
+  }
+
+  .product-tab {
+    @apply py-4 px-1 border-b-2 font-medium text-sm transition-colors;
+  }
+
+  .product-tab-active {
+    @apply border-primary-500 text-primary-500;
+  }
+
+  .product-tab-inactive {
+    @apply border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300;
+  }
+
+  /* Product gallery */
+  .product-gallery-thumbnail {
+    @apply relative aspect-video bg-dark-800 rounded-lg overflow-hidden border-2 transition-all;
+  }
+
+  .product-gallery-thumbnail-active {
+    @apply border-primary-500;
+  }
+
+  .product-gallery-thumbnail-inactive {
+    @apply border-transparent hover:border-gray-600;
+  }
 }
 
 /* Utility styles */

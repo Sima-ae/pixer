@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { useTheme } from '@/lib/theme'
 
 interface CategoryFilterProps {
   selectedCategory: string
@@ -19,6 +20,7 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }: C
   const [startX, setStartX] = useState(0)
   const [scrollLeft, setScrollLeft] = useState(0)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const { theme } = useTheme()
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!scrollContainerRef.current) return
@@ -76,8 +78,12 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }: C
       {/* Left Arrow */}
       <button
         onClick={scrollLeftDirection}
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-dark-800 hover:bg-dark-700 rounded-full flex items-center justify-center text-white shadow-lg border border-dark-600 transition-all duration-200 hover:scale-110"
-        style={{ left: '0px' }}
+        className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full flex items-center justify-center shadow-lg border transition-all duration-200 hover:scale-110 ${
+          theme === 'dark'
+            ? 'bg-dark-800 hover:bg-dark-700 border-dark-600 text-white'
+            : 'bg-white hover:bg-gray-100 border-gray-300 text-gray-700'
+        }`}
+        style={{ left: '8px' }}
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -87,8 +93,12 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }: C
       {/* Right Arrow */}
       <button
         onClick={scrollRightDirection}
-        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-dark-800 hover:bg-dark-700 rounded-full flex items-center justify-center text-white shadow-lg border border-dark-600 transition-all duration-200 hover:scale-110"
-        style={{ right: '0px' }}
+        className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full flex items-center justify-center shadow-lg border transition-all duration-200 hover:scale-110 ${
+          theme === 'dark'
+            ? 'bg-dark-800 hover:bg-dark-700 border-dark-600 text-white'
+            : 'bg-white hover:bg-gray-100 border-gray-300 text-gray-700'
+        }`}
+        style={{ right: '8px' }}
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -98,7 +108,7 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }: C
       {/* Categories Container */}
       <div
         ref={scrollContainerRef}
-        className="flex space-x-3 px-16 overflow-x-auto scrollbar-hide"
+        className="flex space-x-3 px-20 overflow-x-auto scrollbar-hide"
         style={{
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
@@ -118,7 +128,9 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }: C
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 flex-shrink-0 ${
               selectedCategory === category
                 ? 'bg-primary-500 text-white shadow-lg'
-                : 'bg-dark-700 text-gray-300 hover:bg-dark-600 hover:text-white'
+                : theme === 'dark'
+                  ? 'bg-dark-700 text-gray-300 hover:bg-dark-600 hover:text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300 hover:text-gray-900'
             }`}
           >
             {category}

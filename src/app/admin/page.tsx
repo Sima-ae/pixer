@@ -54,7 +54,7 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <StatCard
                 title="Total Revenue"
-                value="$403.20"
+                value="€ 403,20"
                 icon={<BanknotesIcon className="w-6 h-6 text-white" />}
                 accentColor="bg-green-500"
               />
@@ -173,7 +173,7 @@ export default function AdminDashboard() {
                         </td>
                         <td className="py-3 px-4 text-white">{order.products}</td>
                         <td className="py-3 px-4 text-gray-400">{order.orderDate}</td>
-                        <td className="py-3 px-4 text-white">${order.total}</td>
+                        <td className="py-3 px-4 text-white">€ {order.total.toFixed(2).replace('.', ',')}</td>
                         <td className="py-3 px-4">
                           <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                             order.status === 'completed' 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useCart } from '@/lib/cart'
+import { useTheme } from '@/lib/theme'
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -8,6 +9,7 @@ import { TrashIcon, ArrowLeftIcon } from '@heroicons/react/24/outline'
 
 export default function CartPage() {
   const { state: cartState, removeItem, updateQuantity, clearCart } = useCart()
+  const { theme } = useTheme()
   const [isUpdating, setIsUpdating] = useState<string | null>(null)
 
   const handleQuantityChange = async (id: string, newQuantity: number) => {
@@ -30,15 +32,21 @@ export default function CartPage() {
 
   if (cartState.items.length === 0) {
     return (
-      <div className="min-h-screen bg-dark-900 flex items-center justify-center">
+      <div className={`min-h-screen transition-colors duration-200 ${
+        theme === 'dark' ? 'bg-dark-900' : 'bg-gray-50'
+      } flex items-center justify-center`}>
         <div className="text-center">
-          <div className="w-24 h-24 mx-auto mb-6 bg-dark-800 rounded-full flex items-center justify-center">
+          <div className={`w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center transition-colors ${
+            theme === 'dark' ? 'bg-dark-800' : 'bg-white'
+          }`}>
             <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-white mb-2">Your cart is empty</h2>
-          <p className="text-gray-400 mb-6">Looks like you haven't added any products to your cart yet.</p>
+          <p className={`mb-6 transition-colors ${
+            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+          }`}>Looks like you haven't added any products to your cart yet.</p>
           <Link 
             href="/"
             className="btn-primary inline-flex items-center space-x-2"
@@ -52,16 +60,22 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-dark-900">
+    <div className={`min-h-screen transition-colors duration-200 ${
+      theme === 'dark' ? 'bg-dark-900' : 'bg-gray-50'
+    }`}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-4">
-            <Link href="/" className="text-gray-400 hover:text-white transition-colors">
+            <Link href="/" className={`transition-colors ${
+              theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+            }`}>
               <ArrowLeftIcon className="w-6 h-6" />
             </Link>
             <h1 className="text-3xl font-bold text-white">Shopping Cart</h1>
-            <span className="text-gray-400">({cartState.itemCount} items)</span>
+            <span className={`transition-colors ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+            }`}>({cartState.itemCount} items)</span>
           </div>
           <button
             onClick={clearCart}
@@ -76,7 +90,11 @@ export default function CartPage() {
           <div className="lg:col-span-2">
             <div className="space-y-4">
               {cartState.items.map((item) => (
-                <div key={item.id} className="bg-dark-800 rounded-lg p-4 border border-dark-700">
+                <div key={item.id} className={`rounded-lg p-4 border transition-colors ${
+                  theme === 'dark' 
+                    ? 'bg-dark-800 border-dark-700' 
+                    : 'bg-white border-gray-200'
+                }`}>
                   <div className="flex items-center space-x-4">
                     {/* Product Image */}
                     <div className="relative w-20 h-20 flex-shrink-0">
@@ -90,16 +108,20 @@ export default function CartPage() {
 
                     {/* Product Details */}
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-white text-sm line-clamp-2 mb-1">
+                      <h3 className={`font-semibold text-sm line-clamp-2 mb-1 transition-colors ${
+                        theme === 'dark' ? 'text-white' : 'text-gray-900'
+                      }`}>
                         {item.name}
                       </h3>
                       <div className="flex items-center space-x-2 mb-2">
                         <span className="text-primary-500 font-bold">
-                          ${item.price.toFixed(2)}
+                          € {item.price.toFixed(2).replace('.', ',')}
                         </span>
                         {item.original_price && item.original_price > item.price && (
-                          <span className="text-gray-400 line-through text-sm">
-                            ${item.original_price.toFixed(2)}
+                          <span className={`line-through text-sm transition-colors ${
+                            theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                          }`}>
+                            € {item.original_price.toFixed(2).replace('.', ',')}
                           </span>
                         )}
                       </div>
@@ -110,17 +132,27 @@ export default function CartPage() {
                       <button
                         onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
                         disabled={isUpdating === item.id || item.quantity <= 1}
-                        className="w-8 h-8 rounded-lg bg-dark-700 text-gray-400 hover:text-white hover:bg-dark-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className={`w-8 h-8 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                          theme === 'dark'
+                            ? 'bg-dark-700 text-gray-400 hover:text-white hover:bg-dark-600'
+                            : 'bg-gray-200 text-gray-600 hover:text-gray-900 hover:bg-gray-300'
+                        }`}
                       >
                         -
                       </button>
-                      <span className="w-12 text-center text-white font-medium">
+                      <span className={`w-12 text-center font-medium transition-colors ${
+                        theme === 'dark' ? 'text-white' : 'text-gray-900'
+                      }`}>
                         {isUpdating === item.id ? '...' : item.quantity}
                       </span>
                       <button
                         onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
                         disabled={isUpdating === item.id}
-                        className="w-8 h-8 rounded-lg bg-dark-700 text-gray-400 hover:text-white hover:bg-dark-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className={`w-8 h-8 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                          theme === 'dark'
+                            ? 'bg-dark-700 text-gray-400 hover:text-white hover:bg-dark-600'
+                            : 'bg-gray-200 text-gray-600 hover:text-gray-900 hover:bg-gray-300'
+                        }`}
                       >
                         +
                       </button>
@@ -143,22 +175,32 @@ export default function CartPage() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-dark-800 rounded-lg p-6 border border-dark-700 sticky top-8">
+            <div className={`rounded-lg p-6 border sticky top-8 transition-colors ${
+              theme === 'dark' 
+                ? 'bg-dark-800 border-dark-700' 
+                : 'bg-white border-gray-200'
+            }`}>
               <h2 className="text-xl font-bold text-white mb-4">Order Summary</h2>
               
               <div className="space-y-3 mb-6">
-                <div className="flex justify-between text-gray-300">
+                <div className={`flex justify-between transition-colors ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   <span>Subtotal ({cartState.itemCount} items)</span>
-                  <span>${cartState.total.toFixed(2)}</span>
+                  <span>€ {cartState.total.toFixed(2).replace('.', ',')}</span>
                 </div>
-                <div className="flex justify-between text-gray-300">
+                <div className={`flex justify-between transition-colors ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   <span>Tax</span>
                   <span>Calculated at checkout</span>
                 </div>
-                <div className="border-t border-dark-600 pt-3">
+                <div className={`border-t pt-3 ${
+                  theme === 'dark' ? 'border-dark-600' : 'border-gray-300'
+                }`}>
                   <div className="flex justify-between text-lg font-bold text-white">
                     <span>Total</span>
-                    <span>${cartState.total.toFixed(2)}</span>
+                    <span>€ {cartState.total.toFixed(2).replace('.', ',')}</span>
                   </div>
                 </div>
               </div>
@@ -168,7 +210,9 @@ export default function CartPage() {
               </button>
 
               <div className="mt-4 text-center">
-                <Link href="/" className="text-gray-400 hover:text-white transition-colors text-sm">
+                <Link href="/" className={`transition-colors text-sm ${
+                  theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+                }`}>
                   Continue Shopping
                 </Link>
               </div>
