@@ -225,33 +225,9 @@ export default function AdminDashboard() {
               >
                 Go to Login
               </button>
-              
-              <button 
-                onClick={() => window.location.href = '/debug'} 
-                className="btn-secondary w-full"
-              >
-                Debug Authentication
-              </button>
-              
-              <button 
-                onClick={() => window.location.reload()} 
-                className="text-primary-400 hover:text-primary-300 underline text-sm"
-              >
-                Reload Page
-              </button>
             </div>
             
-            {!user && (
-              <div className="mt-6 p-4 bg-dark-800 rounded-lg border border-dark-700">
-                <h3 className="text-sm font-medium text-gray-300 mb-2">Troubleshooting:</h3>
-                <ul className="text-xs text-gray-400 space-y-1 text-left">
-                  <li>• Check if you're logged in</li>
-                  <li>• Verify your account has admin role</li>
-                  <li>• Check browser console for errors</li>
-                  <li>• Visit <span className="text-primary-400">/debug</span> for more info</li>
-                </ul>
-              </div>
-            )}
+
           </div>
         </div>
       </div>
