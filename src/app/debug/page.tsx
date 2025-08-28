@@ -32,7 +32,7 @@ export default function DebugPage() {
                   <span className={`px-2 py-1 rounded text-xs ${
                     value === 'Missing' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
                   }`}>
-                    {value}
+                    {String(value)}
                   </span>
                 </div>
               ))}
